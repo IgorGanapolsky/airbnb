@@ -6,7 +6,17 @@ on:
       - 'develop'
       - 'feature/*'
     paths:
-      - 'apps-template/**'
+      - '.eas/**'
+      - 'eas.json'
+      - 'app.json'
+      - 'app.config.*'
+      - 'src/**'
+      - 'assets/**'
+      - 'package.json'
+
+concurrency:
+  group: preview-${{ github.ref_name }}
+  cancel-in-progress: true
 
 jobs:
   build_preview:
@@ -21,6 +31,6 @@ jobs:
     needs: build_preview
     type: update
     params:
-      branch: ${{{ github.ref_name }}}
-      message: "Preview update from ${{{ github.sha }}}"
+      branch: ${{ github.ref_name }}
+      message: "Preview update from ${{ github.sha }}"
       channel: preview

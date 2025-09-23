@@ -17,7 +17,10 @@
     "ios": {
       "bundleIdentifier": "com.igorganapolsky.appstemplate",
       "supportsTablet": true,
-      "buildNumber": "1"
+      "buildNumber": "1",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "package": "com.igorganapolsky.appstemplate",
@@ -36,6 +39,14 @@
     "scheme": "apps-template",
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "f4748213-dc19-496f-891f-c40004c6eb29"
+      }
     }
   }
 }

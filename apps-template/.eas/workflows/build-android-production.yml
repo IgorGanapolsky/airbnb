@@ -5,7 +5,13 @@ on:
     branches:
       - 'main'
     paths:
-      - 'apps-template/**'
+      - '.eas/**'
+      - 'eas.json'
+      - 'app.json'
+      - 'app.config.*'
+      - 'src/**'
+      - 'assets/**'
+      - 'package.json'
 
 jobs:
   build_android:

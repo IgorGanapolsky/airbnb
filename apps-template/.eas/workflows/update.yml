@@ -6,13 +6,19 @@ on:
       - 'main'
       - 'develop'
     paths:
-      - 'apps-template/**'
+      - '.eas/**'
+      - 'eas.json'
+      - 'app.json'
+      - 'app.config.*'
+      - 'src/**'
+      - 'assets/**'
+      - 'package.json'
 
 jobs:
   update:
     name: Publish update
     type: update
     params:
-      branch: ${{{ github.ref_name }}}
-      message: "Update from ${{{ github.sha }}}"
-      channel: ${{{ github.ref_name === 'main' ? 'production' : 'preview' }}}
+      branch: ${{ github.ref_name }}
+      message: "Update from ${{ github.sha }}"
+      channel: ${{ github.ref_name == 'main' && 'production' || 'preview' }}
