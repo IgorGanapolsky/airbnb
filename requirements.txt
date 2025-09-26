@@ -27,7 +27,7 @@ plotly==5.18.0
 # Utilities
 schedule==1.2.0
 bitlyshortener==0.6.4
-pillow==10.2.0
+pillow==10.3.0
 validators==0.22.0
 
 # Email
