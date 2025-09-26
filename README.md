@@ -1,10 +1,10 @@
-# 🏠 Airbnb Affiliate Marketing Automation System
+# 🏨 Booking.com Affiliate Marketing Automation System
 
-A fully automated, low-budget system for generating and distributing Airbnb affiliate marketing content on Mac. Built with Python 3.12+ and designed to run entirely on free tiers with a $100/month budget.
+A fully automated, low-budget system for generating and distributing Booking.com affiliate marketing content on Mac. Built with Python 3.12+ and designed to run entirely on free tiers with a $100/month budget.
 
 ## 🎯 Project Goals
 
-- **Target Revenue**: $500/month passive income within 3 months
+- **Target Revenue**: $300-800/month passive income within 2 months
 - **Content Production**: 5-10 evergreen pieces per week
 - **Budget**: $100/month (using only free API tiers)
 - **Automation**: Fully automated workflow with minimal manual intervention
