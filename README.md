@@ -1,49 +1,78 @@
-# 🏨 Booking.com Affiliate Bot
+# 🏠 Airbnb Affiliate Marketing Automation System
 
-**Automated passive income system generating $300-800/month through Booking.com affiliate marketing.**
+A fully automated, low-budget system for generating and distributing Airbnb affiliate marketing content on Mac. Built with Python 3.12+ and designed to run entirely on free tiers with a $100/month budget.
 
-Generate 5-10 evergreen travel posts weekly ("Top 10 Budget Stays in Nashville", "Hidden Gems in Charleston") with embedded affiliate links, auto-post to Medium/Twitter/Reddit, and track performance—all running autonomously on your Mac.
+## 🎯 Project Goals
 
-## 💰 Revenue Projections
+- **Target Revenue**: $500/month passive income within 3 months
+- **Content Production**: 5-10 evergreen pieces per week
+- **Budget**: $100/month (using only free API tiers)
+- **Automation**: Fully automated workflow with minimal manual intervention
 
-- **Month 1-2**: $50-150/month (building audience)
-- **Month 3+**: $300-800/month (established content library)
-- **Based on**: 3% click-to-book conversion rate, $25-50 avg commission
+## ✨ Features
 
-## 🚀 Quick Start (5 minutes)
+### 🤖 AI-Powered Content Generation
+- **Trend Research**: Daily analysis of travel trends using Google Trends API
+- **Multi-Format Content**: Blog posts, Twitter threads, Reddit posts, TikTok scripts
+- **SEO Optimization**: Automatic keyword integration and optimization
+- **Quality Scoring**: AI-powered content quality assessment
 
-```bash
-# 1. Clone and install
-git clone <this-repo>
-cd booking-affiliate-bot
-./scripts/install.sh
+### 📱 Multi-Platform Distribution
+- **Medium**: Automated blog post publishing
+- **Twitter/X**: Thread posting with optimal timing
+- **Reddit**: Community-appropriate content sharing
+- **TikTok**: Script generation (manual upload)
 
-# 2. Get your Booking.com affiliate link
-# Visit: https://affiliates.booking.com (takes 2 minutes to sign up)
+### 📊 Performance Analytics
+- **Real-time Dashboard**: Streamlit-based analytics interface
+- **Click Tracking**: Bitly integration for link analytics
+- **Revenue Estimation**: Conversion tracking and projections
+- **AI Optimization**: Automated performance improvement suggestions
 
-# 3. Configure API keys
-cp config/config_template.yaml config/config.yaml
-# Edit config.yaml with your keys (see setup guide below)
+### 🔄 Full Automation
+- **Cron Scheduling**: Automated daily workflows
+- **Error Handling**: Robust retry mechanisms and logging
+- **Rate Limiting**: Platform-compliant posting schedules
+- **Email Notifications**: Performance alerts and summaries
 
-# 4. Test everything
-./scripts/test.sh
+## 🚀 Quick Start (5-Minute Setup)
 
-# 5. Generate first content
-python3 main.py test
+### Prerequisites
+- macOS (Intel or Apple Silicon)
+- Python 3.12+ (will be installed automatically)
+- Homebrew (will be installed automatically)
 
-# 6. Set up automation
-./scripts/setup_cron.sh
+### Installation
 
-# 7. Monitor performance
-python3 main.py dashboard
-```
+1. **Clone and Install**
+   ```bash
+   git clone <repository-url>
+   cd airbnb-affiliate-bot
+   chmod +x scripts/install.sh
+   ./scripts/install.sh
+   ```
 
-## 📋 Requirements
+2. **Configure API Keys**
+   ```bash
+   nano .env
+   ```
+   Update with your API keys (see [API Setup Guide](#api-setup) below)
 
-- **Mac**: macOS 10.15+
-- **Python**: 3.12+
-- **Budget**: $0-100/month (free tiers only)
-- **Time**: 5 min setup, then fully automated
+3. **Test Installation**
+   ```bash
+   ./run.sh --dry-run --mode trends
+   ```
+
+4. **Launch Dashboard**
+   ```bash
+   ./dashboard.sh
+   ```
+   Visit http://localhost:8501
+
+5. **Run Full Workflow**
+   ```bash
+   ./run.sh --mode full
+   ```
 
 ## 🔧 Complete Setup Guide
 
