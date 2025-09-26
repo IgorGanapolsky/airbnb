@@ -21,7 +21,7 @@ matplotlib==3.8.2
 seaborn==0.13.2
 
 # Dashboard
-streamlit==1.31.0
+streamlit==1.37.0
 plotly==5.18.0
 
 # Utilities
