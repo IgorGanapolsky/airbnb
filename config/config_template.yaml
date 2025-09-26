@@ -1,0 +1,115 @@
+# Booking.com Affiliate Bot Configuration
+# Copy this file to config.yaml and fill in your credentials
+
+# Affiliate Settings
+affiliate:
+  booking_link: "YOUR_BOOKING_AFFILIATE_LINK"  # e.g., https://www.booking.com/affiliate-program/...
+  disclosure: "This post contains affiliate links. We may earn a commission at no extra cost to you when you book through our links."
+
+# AI APIs
+ai:
+  openai:
+    api_key: "sk-..."  # Your OpenAI API key
+    model: "gpt-4o-mini"  # or gpt-3.5-turbo for lower cost
+    max_tokens: 2000
+    temperature: 0.7
+
+  anthropic:  # Optional: Use Claude instead
+    api_key: "sk-ant-..."
+    model: "claude-3-haiku-20240307"
+    enabled: false
+
+# Social Media APIs
+social:
+  twitter:
+    api_key: ""
+    api_secret: ""
+    access_token: ""
+    access_token_secret: ""
+    enabled: true
+
+  medium:
+    integration_token: ""  # Get from Medium settings
+    publication_id: ""  # Optional: publish to publication
+    enabled: true
+
+  reddit:
+    client_id: ""
+    client_secret: ""
+    user_agent: "AirbnbBot/1.0"
+    username: ""
+    password: ""
+    subreddits: ["travel", "solotravel", "digitalnomad"]
+    enabled: true
+
+# Analytics & Tracking
+tracking:
+  bitly:
+    access_token: ""  # Free tier API token
+    enabled: true
+
+  google_analytics:  # Optional
+    tracking_id: ""
+    enabled: false
+
+# Image Sources
+images:
+  unsplash:
+    access_key: ""  # Free API key
+    enabled: true
+
+  dalle:
+    enabled: false  # Uses OpenAI credits
+    size: "1024x1024"
+
+# Content Settings
+content:
+  cities:
+    - Nashville
+    - Charleston
+    - Austin
+    - Portland
+    - Denver
+    - San Diego
+    - Miami
+    - Boston
+    - Seattle
+    - New Orleans
+
+  posting_schedule:
+    blogs_per_week: 3
+    social_posts_per_week: 10
+    best_times:  # UTC times
+      - "14:00"  # 9 AM EST
+      - "19:00"  # 2 PM EST
+      - "01:00"  # 8 PM EST
+
+  seo:
+    min_word_count: 800
+    max_word_count: 1500
+    keyword_density: 0.02  # 2%
+
+# Email Notifications
+email:
+  enabled: true
+  smtp_server: "smtp.gmail.com"
+  smtp_port: 587
+  sender_email: ""
+  sender_password: ""  # Use app-specific password
+  recipient_email: ""
+
+# System Settings
+system:
+  database_path: "data/trends.db"
+  log_level: "INFO"
+  log_file: "logs/bot.log"
+  dry_run: false  # Set to true for testing without posting
+  max_retries: 3
+  retry_delay: 60  # seconds
+
+# Performance Targets
+targets:
+  monthly_revenue: 500  # USD
+  conversion_rate: 0.03  # 3%
+  avg_commission: 50  # USD per booking
+  click_through_rate: 0.05  # 5%
