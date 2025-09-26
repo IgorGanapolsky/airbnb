@@ -1,30 +1,68 @@
 #!/bin/bash
-# Test script for Booking.com Affiliate Bot
+# Test script for Airbnb Affiliate Bot
 
 set -e
+
+# Colors for output
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+RED='\033[0;31m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+
+print_status() {
+    echo -e "${GREEN}[✅]${NC} $1"
+}
+
+print_warning() {
+    echo -e "${YELLOW}[⚠️]${NC} $1"
+}
+
+print_error() {
+    echo -e "${RED}[❌]${NC} $1"
+}
+
+print_step() {
+    echo -e "${BLUE}[🔧]${NC} $1"
+}
 
 BOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$BOT_DIR"
 
-echo "🧪 Testing Booking.com Affiliate Bot Setup..."
+echo "🧪 Testing Airbnb Affiliate Bot Setup..."
+echo "========================================"
+
+# Check if virtual environment exists
+if [ ! -d "venv" ]; then
+    print_error "Virtual environment not found. Run ./scripts/install.sh first."
+    exit 1
+fi
 
 # Activate virtual environment
-echo "🔧 Activating virtual environment..."
+print_step "Activating virtual environment..."
 source venv/bin/activate
 
 # Test Python dependencies
-echo "📦 Testing Python dependencies..."
+print_step "Testing Python dependencies..."
 python3 -c "
 import sys
 required_modules = [
-    'yaml', 'openai', 'requests', 'beautifulsoup4', 'pytrends',
-    'tweepy', 'praw', 'pandas', 'streamlit', 'schedule', 'bitlyshortener'
+    'yaml', 'openai', 'anthropic', 'requests', 'beautifulsoup4', 'pytrends',
+    'tweepy', 'praw', 'pandas', 'streamlit', 'schedule', 'bitlyshortener',
+    'pillow', 'matplotlib', 'seaborn', 'plotly'
 ]
 
 missing = []
 for module in required_modules:
     try:
-        __import__(module)
+        if module == 'yaml':
+            import yaml
+        elif module == 'beautifulsoup4':
+            import bs4
+        elif module == 'pillow':
+            import PIL
+        else:
+            __import__(module)
         print(f'✅ {module}')
     except ImportError:
         missing.append(module)
@@ -32,6 +70,7 @@ for module in required_modules:
 
 if missing:
     print(f'Missing modules: {missing}')
+    print('Run: pip install -r requirements.txt')
     sys.exit(1)
 else:
     print('✅ All required modules available')

@@ -74,9 +74,121 @@ A fully automated, low-budget system for generating and distributing Airbnb affi
    ./run.sh --mode full
    ```
 
-## 🔧 Complete Setup Guide
+## 🔑 API Setup Guide
 
-### 1. System Dependencies
+### Required APIs (Free Tiers)
+
+#### 1. OpenAI API (Required)
+- Sign up at [platform.openai.com](https://platform.openai.com)
+- Get API key from API Keys section
+- Uses `gpt-4o-mini` for cost efficiency
+
+#### 2. Airbnb Affiliate Program (Required)
+- Join at [partners.airbnb.com](https://partners.airbnb.com)
+- Get your affiliate link
+- Commission: ~3% of booking value
+
+### Optional APIs (Enhanced Features)
+
+#### 3. Twitter API v2 (Free Tier)
+- Apply at [developer.twitter.com](https://developer.twitter.com)
+- Get Bearer Token and API credentials
+- Free tier: 1,500 tweets/month
+
+#### 4. Medium API (Free)
+- Get integration token from [medium.com/me/settings](https://medium.com/me/settings)
+- Unlimited posts to personal account
+
+#### 5. Reddit API (Free)
+- Create app at [reddit.com/prefs/apps](https://reddit.com/prefs/apps)
+- Get client ID and secret
+- Rate limit: 60 requests/minute
+
+#### 6. Bitly API (Free Tier)
+- Sign up at [bitly.com](https://bitly.com)
+- Get access token from settings
+- Free tier: 1,000 links/month
+
+#### 7. Unsplash API (Free)
+- Register at [unsplash.com/developers](https://unsplash.com/developers)
+- Get access key
+- Free tier: 5,000 requests/hour
+
+## 📁 Project Structure
+
+```
+airbnb-affiliate-bot/
+├── main.py                 # Main entry point
+├── config/
+│   └── config.yaml        # Configuration file
+├── agents/
+│   ├── trend_research_agent.py
+│   ├── content_generation_agent.py
+│   ├── posting_agent.py
+│   └── tracking_agent.py
+├── utils/
+│   ├── config_manager.py
+│   ├── database.py
+│   └── logger.py
+├── dashboard/
+│   └── app.py            # Streamlit dashboard
+├── scripts/
+│   ├── install.sh        # Installation script
+│   └── setup_cron.sh     # Automation setup
+├── content/              # Generated content
+│   ├── blogs/
+│   ├── social/
+│   └── images/
+├── data/                 # Database and analytics
+└── logs/                 # Application logs
+```
+
+## 🎮 Usage
+
+### Command Line Interface
+
+```bash
+# Run full automation workflow
+./run.sh --mode full
+
+# Individual components
+./run.sh --mode trends     # Research trends
+./run.sh --mode content    # Generate content
+./run.sh --mode post       # Post content
+./run.sh --mode track      # Update analytics
+
+# Dry run mode (no actual posting)
+./run.sh --dry-run --mode full
+
+# Launch dashboard
+./dashboard.sh
+```
+
+### Dashboard Features
+
+- **Overview**: Key metrics and performance summary
+- **Content Analytics**: Content quality and performance
+- **Performance Metrics**: Detailed click and conversion data
+- **Optimization**: AI-powered improvement suggestions
+- **Settings**: Configuration and API status
+
+## 📈 Revenue Projections
+
+### Conservative Estimate (3 months)
+- **Content**: 60 blog posts, 150 social posts
+- **Traffic**: 10,000 monthly page views
+- **Click Rate**: 3% (300 clicks/month)
+- **Conversion Rate**: 2% (6 bookings/month)
+- **Average Booking**: $150
+- **Monthly Revenue**: $270 (54% of target)
+
+### Optimistic Estimate (6 months)
+- **Content**: 120 blog posts, 300 social posts
+- **Traffic**: 25,000 monthly page views
+- **Click Rate**: 5% (1,250 clicks/month)
+- **Conversion Rate**: 3% (37 bookings/month)
+- **Average Booking**: $150
+- **Monthly Revenue**: $1,665 (333% of target)
 
 ```bash
 # Install Python 3.12+ via Homebrew
