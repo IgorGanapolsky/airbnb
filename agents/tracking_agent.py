@@ -361,3 +361,220 @@ class TrackingAgent:
             return 'D'
         else:
             return 'F'
+
+    def _get_optimization_suggestions(self, performance_summary: Dict) -> List[str]:
+        """Get AI-powered optimization suggestions."""
+        if not self.ai_client:
+            return self._get_fallback_suggestions(performance_summary)
+
+        try:
+            prompt = self._build_optimization_prompt(performance_summary)
+
+            if isinstance(self.ai_client, str) and self.ai_client == 'openai':
+                response = openai.ChatCompletion.create(
+                    model=self.config.get('ai', {}).get('openai_model', 'gpt-4o-mini'),
+                    messages=[{"role": "user", "content": prompt}],
+                    max_tokens=800,
+                    temperature=0.7
+                )
+                content = response.choices[0].message.content
+            else:
+                # Anthropic
+                response = self.ai_client.messages.create(
+                    model=self.config.get('ai', {}).get('anthropic_model', 'claude-3-haiku-20240307'),
+                    max_tokens=800,
+                    messages=[{"role": "user", "content": prompt}]
+                )
+                content = response.content[0].text
+
+            # Parse suggestions from AI response
+            suggestions = self._parse_optimization_suggestions(content)
+            return suggestions
+
+        except Exception as e:
+            self.logger.error(f"Failed to get AI optimization suggestions: {e}")
+            return self._get_fallback_suggestions(performance_summary)
+
+    def _build_optimization_prompt(self, performance_summary: Dict) -> str:
+        """Build prompt for AI optimization suggestions."""
+        targets = self._get_performance_targets()
+
+        return f"""
+You are an expert in affiliate marketing optimization. Analyze the following performance data and provide specific, actionable optimization suggestions.
+
+CURRENT PERFORMANCE:
+- Total Posts: {performance_summary.get('total_posts', 0)}
+- Total Clicks: {performance_summary.get('total_clicks', 0)}
+- Click Rate: {performance_summary.get('click_rate', 0):.2%}
+- Conversion Rate: {performance_summary.get('conversion_rate', 0):.2%}
+- Estimated Revenue: ${performance_summary.get('estimated_revenue', 0):.2f}
+- Performance Grade: {performance_summary.get('performance_grade', 'C')}
+
+TARGETS:
+- Target Click Rate: {targets.get('click_rate', 0.05):.2%}
+- Target Conversion Rate: {targets.get('conversion_rate', 0.03):.2%}
+- Target Monthly Revenue: ${targets.get('monthly_revenue', 500):.2f}
+
+CONTEXT:
+- Platform: Airbnb affiliate marketing
+- Content Types: Blog posts, Twitter threads, Reddit posts
+- Budget: $100/month (free tools only)
+- Target: Passive income generation
+
+Provide 5-7 specific, actionable optimization suggestions. Focus on:
+1. Content strategy improvements
+2. SEO optimization
+3. Social media engagement
+4. Conversion rate optimization
+5. Automation improvements
+
+Format as numbered list:
+1. [Specific suggestion]
+2. [Specific suggestion]
+...
+"""
+
+    def _parse_optimization_suggestions(self, ai_response: str) -> List[str]:
+        """Parse optimization suggestions from AI response."""
+        suggestions = []
+        lines = ai_response.strip().split('\n')
+
+        for line in lines:
+            line = line.strip()
+            if line and (line[0].isdigit() or line.startswith('-') or line.startswith('•')):
+                # Remove numbering and clean up
+                suggestion = line.split('.', 1)[-1].strip()
+                suggestion = suggestion.lstrip('- •').strip()
+                if suggestion and len(suggestion) > 20:  # Ensure it's substantial
+                    suggestions.append(suggestion)
+
+        return suggestions[:7]  # Limit to 7 suggestions
+
+    def _get_fallback_suggestions(self, performance_summary: Dict) -> List[str]:
+        """Get fallback optimization suggestions when AI is not available."""
+        suggestions = []
+
+        click_rate = performance_summary.get('click_rate', 0)
+        conversion_rate = performance_summary.get('conversion_rate', 0)
+        total_posts = performance_summary.get('total_posts', 0)
+
+        if click_rate < 0.03:
+            suggestions.append("Improve headline writing with more compelling, benefit-focused titles")
+            suggestions.append("Add more visual content and infographics to increase engagement")
+
+        if conversion_rate < 0.02:
+            suggestions.append("Optimize affiliate link placement and make calls-to-action more prominent")
+            suggestions.append("Create more targeted content for specific traveler personas")
+
+        if total_posts < 20:
+            suggestions.append("Increase content production frequency to build audience and authority")
+            suggestions.append("Diversify content types to reach different audience segments")
+
+        suggestions.extend([
+            "Focus on long-tail SEO keywords with lower competition",
+            "Engage more actively with comments and community discussions",
+            "Create seasonal content tied to travel trends and holidays"
+        ])
+
+        return suggestions[:7]
+
+    def _get_performance_targets(self) -> Dict[str, float]:
+        """Get performance targets from configuration."""
+        return {
+            'click_rate': self.config.get('performance', {}).get('target_click_rate', 0.05),
+            'conversion_rate': self.config.get('performance', {}).get('target_conversion_rate', 0.03),
+            'monthly_revenue': self.config.get('performance', {}).get('target_monthly_revenue', 500.0)
+        }
+
+    def _generate_recommendations(self, performance_summary: Dict) -> List[str]:
+        """Generate specific recommendations based on performance."""
+        recommendations = []
+
+        grade = performance_summary.get('performance_grade', 'C')
+        revenue = performance_summary.get('estimated_revenue', 0)
+
+        if grade in ['D', 'F']:
+            recommendations.append("Focus on content quality over quantity")
+            recommendations.append("Review and optimize your affiliate link strategy")
+        elif grade == 'C':
+            recommendations.append("Increase posting frequency while maintaining quality")
+            recommendations.append("Experiment with different content formats")
+        elif grade in ['A', 'B']:
+            recommendations.append("Scale successful content strategies")
+            recommendations.append("Consider expanding to additional platforms")
+
+        if revenue < 100:
+            recommendations.append("Focus on high-converting keywords and destinations")
+        elif revenue < 300:
+            recommendations.append("Optimize existing high-performing content")
+        else:
+            recommendations.append("Consider premium tools to scale further")
+
+        return recommendations
+
+    def _save_performance_report(self, report: Dict):
+        """Save performance report to database."""
+        try:
+            # Save summary to performance_summary table
+            summary = report['summary']
+            with self.db.get_connection() as conn:
+                cursor = conn.cursor()
+                cursor.execute('''
+                    INSERT OR REPLACE INTO performance_summary
+                    (date, total_posts, total_views, total_clicks, total_conversions,
+                     estimated_revenue, click_rate, conversion_rate)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                ''', (
+                    datetime.now().date(),
+                    summary.get('total_posts', 0),
+                    summary.get('total_views', 0),
+                    summary.get('total_clicks', 0),
+                    summary.get('total_conversions', 0),
+                    summary.get('estimated_revenue', 0),
+                    summary.get('click_rate', 0),
+                    summary.get('conversion_rate', 0)
+                ))
+                conn.commit()
+
+            self.logger.info("Performance report saved to database")
+
+        except Exception as e:
+            self.logger.error(f"Failed to save performance report: {e}")
+
+    def _should_send_notification(self, performance_summary: Dict) -> bool:
+        """Check if performance notification should be sent."""
+        # Send notification if revenue target is met or exceeded
+        revenue = performance_summary.get('estimated_revenue', 0)
+        target_revenue = self.config.get('performance', {}).get('target_monthly_revenue', 500)
+
+        return revenue >= target_revenue * 0.1  # 10% of target
+
+    def _send_performance_notification(self, report: Dict):
+        """Send performance notification email."""
+        try:
+            summary = report['summary']
+            subject = f"Airbnb Affiliate Performance Update - ${summary.get('estimated_revenue', 0):.2f} Revenue"
+
+            message = f"""
+Performance Report - {datetime.now().strftime('%Y-%m-%d')}
+
+SUMMARY:
+- Total Posts: {summary.get('total_posts', 0)}
+- Total Clicks: {summary.get('total_clicks', 0)}
+- Click Rate: {summary.get('click_rate', 0):.2%}
+- Estimated Revenue: ${summary.get('estimated_revenue', 0):.2f}
+- Performance Grade: {summary.get('performance_grade', 'C')}
+
+TOP OPTIMIZATION SUGGESTIONS:
+"""
+
+            for i, suggestion in enumerate(report.get('optimization_suggestions', [])[:3], 1):
+                message += f"{i}. {suggestion}\n"
+
+            message += f"\nView full dashboard for detailed analytics."
+
+            # This would integrate with the posting agent's email functionality
+            self.logger.info(f"Performance notification prepared: {subject}")
+
+        except Exception as e:
+            self.logger.error(f"Failed to send performance notification: {e}")
