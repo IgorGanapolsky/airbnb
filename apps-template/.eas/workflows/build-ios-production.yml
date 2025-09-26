@@ -1,0 +1,22 @@
+name: iOS production build
+
+on:
+  push:
+    branches:
+      - 'main'
+    paths:
+      - '.eas/**'
+      - 'eas.json'
+      - 'app.json'
+      - 'app.config.*'
+      - 'src/**'
+      - 'assets/**'
+      - 'package.json'
+
+jobs:
+  build_ios:
+    name: Build iOS
+    type: build
+    params:
+      platform: ios
+      profile: production

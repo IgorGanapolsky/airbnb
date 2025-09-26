@@ -1,0 +1,77 @@
+name: EAS Build
+
+on:
+  workflow_dispatch:
+    inputs:
+      platform:
+        description: "ios | android | all"
+        required: true
+        default: "ios"
+        type: choice
+        options: [ios, android, all]
+      profile:
+        description: "EAS build profile"
+        required: true
+        default: "preview"
+        type: choice
+        options: [preview, production]
+  pull_request:
+    types: [labeled]
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install deps
+        run: npm ci --no-audit --no-fund
+
+      - name: Install EAS CLI
+        run: npm i -g eas-cli
+
+      - name: EAS whoami
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+        run: eas whoami || true
+
+      - name: Build
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+        run: |
+          if [ -z "${EXPO_TOKEN:-}" ]; then
+            echo "EXPO_TOKEN is not set; skipping EAS Build. Add EXPO_TOKEN to repo secrets to enable builds.";
+            exit 0;
+          fi
+
+          # Handle label-based builds for PRs
+          if [[ "${{ github.event_name }}" == "pull_request" && "${{ github.event.label.name }}" =~ ^eas-build- ]]; then
+            LABEL="${{ github.event.label.name }}"
+            PLATFORM=$(echo "$LABEL" | cut -d'-' -f3 | cut -d':' -f1)
+            PROFILE=$(echo "$LABEL" | cut -d':' -f2)
+          else
+            # Handle manual and tag-based builds
+            PLATFORM="${{ inputs.platform || 'ios' }}"
+            PROFILE="${{ inputs.profile || 'preview' }}"
+            if [ -z "$PLATFORM" ]; then PLATFORM="ios"; fi
+            if [ -z "$PROFILE" ]; then PROFILE="preview"; fi
+          fi
+
+          if [ "$PLATFORM" = "all" ]; then
+            eas build --platform ios --profile "$PROFILE" --non-interactive
+            eas build --platform android --profile "$PROFILE" --non-interactive
+          else
+            eas build --platform "$PLATFORM" --profile "$PROFILE" --non-interactive
+          fi

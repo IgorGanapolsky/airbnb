@@ -1,0 +1,22 @@
+name: Android production build
+
+on:
+  push:
+    branches:
+      - 'main'
+    paths:
+      - '.eas/**'
+      - 'eas.json'
+      - 'app.json'
+      - 'app.config.*'
+      - 'src/**'
+      - 'assets/**'
+      - 'package.json'
+
+jobs:
+  build_android:
+    name: Build Android
+    type: build
+    params:
+      platform: android
+      profile: production

@@ -1,0 +1,64 @@
+name: EAS Build
+
+on:
+  workflow_dispatch:
+    inputs:
+      project:
+        description: "Project to build"
+        required: true
+        default: "apps-template"
+        type: choice
+        options: [apps-template, SuperPassword]
+      platform:
+        description: "Platform to build for"
+        required: true
+        default: "ios"
+        type: choice
+        options: [ios, android, all]
+      profile:
+        description: "Build profile"
+        required: true
+        default: "development"
+        type: choice
+        options: [development, preview, production]
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build:
+    name: Build App
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ github.event.inputs.project || 'apps-template' }}
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: '**/package-lock.json'
+
+      - name: Setup EAS
+        uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build on EAS
+        run: |
+          if [ "${{ github.event.inputs.platform || 'ios' }}" = "all" ]; then
+            eas build --platform ios --profile ${{ github.event.inputs.profile || 'development' }} --non-interactive
+            eas build --platform android --profile ${{ github.event.inputs.profile || 'development' }} --non-interactive
+          else
+            eas build --platform ${{ github.event.inputs.platform || 'ios' }} --profile ${{ github.event.inputs.profile || 'development' }} --non-interactive
+          fi

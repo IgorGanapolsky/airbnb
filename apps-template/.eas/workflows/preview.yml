@@ -1,0 +1,36 @@
+name: Preview build and update
+
+on:
+  push:
+    branches:
+      - 'develop'
+      - 'feature/*'
+    paths:
+      - '.eas/**'
+      - 'eas.json'
+      - 'app.json'
+      - 'app.config.*'
+      - 'src/**'
+      - 'assets/**'
+      - 'package.json'
+
+concurrency:
+  group: preview-${{ github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  build_preview:
+    name: Build preview
+    type: build
+    params:
+      platform: all
+      profile: preview
+
+  update_preview:
+    name: Update preview
+    needs: build_preview
+    type: update
+    params:
+      branch: ${{ github.ref_name }}
+      message: "Preview update from ${{ github.sha }}"
+      channel: preview

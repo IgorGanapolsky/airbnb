@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+pip-selfcheck.json
+
+# Config files
+config.yaml
+*.db
+*.log
+
+# Mac
+.DS_Store
+
+# Generated Content & Data
+/content/
+/data/
+/logs/

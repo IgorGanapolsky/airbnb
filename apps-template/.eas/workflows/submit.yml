@@ -1,0 +1,26 @@
+name: Submit to stores
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  submit_ios:
+    name: Submit iOS
+    type: submit
+    params:
+      platform: ios
+      profile: production
+    env:
+      APP_STORE_CONNECT_API_KEY_PATH: credentials/authkey.json
+
+  submit_android:
+    name: Submit Android
+    type: submit
+    params:
+      platform: android
+      profile: production
+    env:
+      SUPPLY_JSON_KEY_PATH: credentials/play-store-key.json

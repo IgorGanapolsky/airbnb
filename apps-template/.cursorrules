@@ -1,0 +1,24 @@
+# Cursor AI Rules for React Native Expo Template
+
+## Code Style
+- Use TypeScript for all new files
+- Use functional components with hooks
+- Define prop interfaces for all components
+- Keep components small and focused
+
+## File Organization
+- Components go in components/
+- Screens go in screens/
+- Utilities go in utils/
+- Types go in types/
+
+## Security
+- Never commit API keys or secrets
+- Use environment variables for configuration
+- Keep sensitive data out of source control
+
+## Dependencies
+- Prefer Expo SDK packages over bare React Native packages
+- Document why each dependency is needed
+- Keep bundle size minimal
+

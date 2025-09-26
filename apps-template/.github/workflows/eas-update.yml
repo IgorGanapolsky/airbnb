@@ -1,0 +1,53 @@
+name: EAS Update
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: "EAS Update branch"
+        required: true
+        default: "main"
+        type: string
+      message:
+        description: "Update message"
+        required: true
+        default: "CI update"
+        type: string
+  push:
+    branches: [ main ]
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install deps
+        run: npm ci --no-audit --no-fund
+
+      - name: Install EAS CLI
+        run: npm i -g eas-cli
+
+      - name: EAS Update
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+        run: |
+          if [ -z "${EXPO_TOKEN:-}" ]; then
+            echo "EXPO_TOKEN is not set; skipping EAS Update. Add EXPO_TOKEN to repo secrets to enable updates.";
+            exit 0;
+          fi
+
+          BRANCH="${{ inputs.branch || 'main' }}"
+          MSG="${{ inputs.message || github.sha }}"
+          if [ -z "$BRANCH" ]; then BRANCH="main"; fi
+          if [ -z "$MSG" ]; then MSG="${GITHUB_SHA}"; fi
+          eas update --branch "$BRANCH" --message "$MSG" --non-interactive
