@@ -1,6 +1,6 @@
-# 🏨 Booking.com Affiliate Marketing Automation System
+# 🤖 Affiliate Marketing Automation System
 
-A fully automated, low-budget system for generating and distributing Booking.com affiliate marketing content on Mac. Built with Python 3.12+ and designed to run entirely on free tiers with a $100/month budget.
+A fully automated, low-budget system for generating and distributing affiliate marketing content on Mac. Built with Python 3.12+ and designed to run entirely on free tiers with a $100/month budget.
 
 ## 🎯 Project Goals
 
@@ -47,7 +47,7 @@ A fully automated, low-budget system for generating and distributing Booking.com
 1. **Clone and Install**
    ```bash
    git clone <repository-url>
-   cd airbnb-affiliate-bot
+   cd affiliate-bot
    chmod +x scripts/install.sh
    ./scripts/install.sh
    ```
@@ -83,10 +83,9 @@ A fully automated, low-budget system for generating and distributing Booking.com
 - Get API key from API Keys section
 - Uses `gpt-4o-mini` for cost efficiency
 
-#### 2. Airbnb Affiliate Program (Required)
-- Join at [partners.airbnb.com](https://partners.airbnb.com)
+#### 2. Affiliate Program (Required)
+- Join an affiliate program (e.g., Booking.com, CJ, etc.)
 - Get your affiliate link
-- Commission: ~3% of booking value
 
 ### Optional APIs (Enhanced Features)
 
@@ -117,7 +116,7 @@ A fully automated, low-budget system for generating and distributing Booking.com
 ## 📁 Project Structure
 
 ```
-airbnb-affiliate-bot/
+affiliate-bot/
 ├── main.py                 # Main entry point
 ├── config/
 │   └── config.yaml        # Configuration file
@@ -149,16 +148,16 @@ airbnb-affiliate-bot/
 
 ```bash
 # Run full automation workflow
-./run.sh --mode full
+./run.sh full
 
 # Individual components
-./run.sh --mode trends     # Research trends
-./run.sh --mode content    # Generate content
-./run.sh --mode post       # Post content
-./run.sh --mode track      # Update analytics
+./run.sh research     # Research trends
+./run.sh generate    # Generate content
+./run.sh post       # Post content
+./run.sh analytics      # Update analytics
 
 # Dry run mode (no actual posting)
-./run.sh --dry-run --mode full
+./run.sh full --dry-run
 
 # Launch dashboard
 ./dashboard.sh
@@ -201,14 +200,6 @@ brew install python@3.12
 ### 2. API Keys & Credentials
 
 Edit `config/config.yaml` with your credentials:
-
-#### Booking.com Affiliate (Required)
-```yaml
-affiliate:
-  booking_link: "https://www.booking.com/affiliate-program/..."
-```
-- Sign up: https://affiliates.booking.com
-- Get your affiliate link from the dashboard
 
 #### OpenAI API (Required)
 ```yaml
@@ -339,31 +330,31 @@ Opens Streamlit dashboard at `http://localhost:8501` showing:
 
 ### Content Pipeline
 
-1. **Trend Research Agent** (`agents/trend_research.py`)
+1. **Trend Research Agent** (`agents/trend_research_agent.py`)
    - Google Trends API integration
    - City-specific travel trend analysis
    - Content idea generation with AI
 
-2. **Content Generator** (`agents/content_generator.py`)
+2. **Content Generation Agent** (`agents/content_generation_agent.py`)
    - Blog posts (800-1500 words, SEO optimized)
    - Twitter threads (5-7 tweets)
    - Reddit posts (authentic, community-friendly)
    - TikTok scripts (30-second format)
 
-3. **Auto-Poster** (`agents/auto_poster.py`)
+3. **Posting Agent** (`agents/posting_agent.py`)
    - Medium API posting
    - Twitter thread publishing
    - Reddit community posting
    - Error handling and retries
 
-4. **Analytics Tracker** (`dashboard/analytics_dashboard.py`)
+4. **Tracking Agent** (`agents/tracking_agent.py`)
    - Bitly click tracking
    - Revenue estimation
    - Performance optimization
 
 ### Data Storage
 
-SQLite database (`data/booking_bot.db`) stores:
+SQLite database (`data/affiliate_bot.db`) stores:
 - Trend research results
 - Generated content
 - Posting history
@@ -380,7 +371,7 @@ Discover Nashville's best-kept accommodation secrets...
 ## 1. Historic District Boutique
 - **Price**: $89/night
 - **Why special**: Original 1800s architecture
-- **Book here**: [Booking.com link]
+- **Book here**: [Affiliate link]
 
 [Continue with 9 more recommendations]
 ```
@@ -478,7 +469,7 @@ python3 main.py full --verbose
 
 ### FTC Compliance
 - All posts include affiliate disclosure
-- Clear relationship with Booking.com
+- Clear relationship with affiliate programs
 - No misleading claims
 
 ### Platform Guidelines

@@ -1,12 +1,12 @@
 #!/bin/bash
 
-# Airbnb Affiliate Bot Installation Script for macOS
+# Affiliate Bot Installation Script for macOS
 # This script sets up the complete environment and dependencies
 
 set -e  # Exit on any error
 
-echo "🏠 Airbnb Affiliate Bot - Installation Script"
-echo "=============================================="
+echo "🤖 Affiliate Bot - Installation Script"
+echo "============================================"
 
 # Colors for output
 RED='\033[0;31m'
@@ -108,14 +108,14 @@ print_status "Project directories created"
 # Step 6: Copy and setup configuration
 print_step "6. Setting up configuration..."
 if [ ! -f "config/config.yaml" ]; then
-    print_error "config/config.yaml not found! Please ensure the configuration file exists."
-    exit 1
+    cp config/config_template.yaml config/config.yaml
+    print_status "config.yaml created from template."
 fi
 
 # Create .env file template if it doesn't exist
 if [ ! -f ".env" ]; then
     cat > .env << EOF
-# Airbnb Affiliate Bot Environment Variables
+# Affiliate Bot Environment Variables
 # Copy this file and update with your actual API keys
 
 # AI Services (Required - choose one)
@@ -143,7 +143,7 @@ BITLY_ACCESS_TOKEN=your_bitly_access_token
 UNSPLASH_ACCESS_KEY=your_unsplash_access_key
 
 # Affiliate Configuration
-AIRBNB_AFFILIATE_LINK=your_airbnb_affiliate_link
+AFFILIATE_LINK=your_affiliate_link
 
 # Email Configuration
 SENDER_EMAIL=your_email@gmail.com
@@ -161,7 +161,7 @@ fi
 
 # Step 7: Test the installation
 print_step "7. Testing installation..."
-if python3 main.py --dry-run --mode trends; then
+if python3 main.py test --dry-run; then
     print_status "Installation test passed!"
 else
     print_error "Installation test failed. Please check the logs."
@@ -188,7 +188,7 @@ print_step "9. Creating launch scripts..."
 # Create run script
 cat > "$PROJECT_DIR/run.sh" << EOF
 #!/bin/bash
-# Airbnb Affiliate Bot Runner Script
+# Affiliate Bot Runner Script
 
 cd "$PROJECT_DIR"
 source venv/bin/activate
@@ -206,7 +206,7 @@ cat > "$PROJECT_DIR/dashboard.sh" << EOF
 cd "$PROJECT_DIR"
 source venv/bin/activate
 
-echo "🏠 Starting Airbnb Affiliate Bot Dashboard..."
+echo "🏠 Starting Affiliate Bot Dashboard..."
 echo "Dashboard will be available at: http://localhost:8501"
 echo "Press Ctrl+C to stop the dashboard"
 
@@ -225,16 +225,16 @@ echo "1. Update the .env file with your API keys:"
 echo "   nano .env"
 echo
 echo "2. Test the bot in dry-run mode:"
-echo "   ./run.sh --dry-run"
+echo "   ./run.sh test --dry-run"
 echo
 echo "3. Launch the dashboard:"
 echo "   ./dashboard.sh"
 echo
 echo "4. Run the full workflow:"
-echo "   ./run.sh --mode full"
+echo "   ./run.sh full"
 echo
 echo "5. View logs:"
-echo "   tail -f logs/airbnb_bot.log"
+echo "   tail -f logs/affiliate_bot.log"
 echo
 print_warning "Remember to configure your API keys in the .env file before running!"
 print_status "Happy affiliate marketing! 🚀"

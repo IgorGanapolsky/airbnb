@@ -338,3 +338,14 @@ class DatabaseManager:
                 summary['conversion_rate'] = 0.0
 
             return summary
+
+    def update_trend_status(self, trend_id: int, status: str):
+        """Update trend status."""
+        with self.get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute('''
+                UPDATE trends SET status = ?, updated_at = CURRENT_TIMESTAMP
+                WHERE id = ?
+            ''', (status, trend_id))
+            conn.commit()
+            self.logger.info(f"Updated trend {trend_id} status to {status}")

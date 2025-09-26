@@ -3,6 +3,12 @@ Posting Agent
 Handles automated posting to Medium, Twitter/X, Reddit with scheduling and fallback mechanisms.
 """
 
+import sys
+if sys.version_info >= (3, 13):
+    import mimetypes
+    mimetypes.add_type("image/jpeg", ".jpg")
+    sys.modules["imghdr"] = mimetypes
+
 import re
 import time
 import smtplib

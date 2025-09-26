@@ -12,13 +12,9 @@ beautifulsoup4==4.12.3
 pytrends==4.9.2
 tweepy==4.14.0
 praw==7.7.1
-python-medium==1.1.8
 
 # Data & Analytics
 pandas==2.2.0
-sqlite3-to-mysql==2.1.7
-matplotlib==3.8.2
-seaborn==0.13.2
 
 # Dashboard
 streamlit==1.31.0
@@ -27,15 +23,7 @@ plotly==5.18.0
 # Utilities
 schedule==1.2.0
 bitlyshortener==0.6.4
-pillow==10.2.0
-validators==0.22.0
-
-# Email
-secure-smtplib==0.1.1
 
 # Testing
 pytest==8.0.0
 pytest-mock==3.12.0
-
-# Image APIs
-python-unsplash==2.1.0
