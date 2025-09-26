@@ -1,0 +1,13 @@
+requests
+beautifulsoup4
+openai
+tweepy
+schedule
+pandas
+matplotlib
+praw
+pytrends
+PyYAML
+streamlit
+python-medium
+python-dotenv
