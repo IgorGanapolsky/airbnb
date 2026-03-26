@@ -17,7 +17,7 @@ praw==7.7.1
 pandas==2.2.0
 
 # Dashboard
-streamlit==1.31.0
+streamlit==1.54.0
 plotly==5.18.0
 
 # Utilities
