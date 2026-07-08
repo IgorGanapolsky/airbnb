@@ -25,5 +25,5 @@ schedule==1.2.0
 bitlyshortener==0.6.4
 
 # Testing
-pytest==8.0.0
+pytest==9.0.3
 pytest-mock==3.12.0
